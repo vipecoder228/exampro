@@ -43,7 +43,7 @@ export default function ProgressPage() {
         <div className="flex gap-2 mt-3">
           {[3, 5, 7, 10].map((g) => (
             <button key={g} onClick={() => setWeeklyGoal(g)}
-              className="px-2 py-1 rounded text-xs font-medium transition-all"
+              className="px-3 py-2 rounded text-sm font-medium transition-all min-h-[40px]"
               style={{
                 background: weeklyGoal === g ? 'var(--accent)' : 'var(--border)',
                 color: weeklyGoal === g ? '#fff' : 'var(--text-secondary)',
@@ -165,7 +165,7 @@ export default function ProgressPage() {
             {results.slice(-5).reverse().map((r) => {
               const subject = subjects.find((s) => s.id === r.subjectId);
               return (
-                <div key={r.id} className="flex items-center justify-between p-2 rounded border" style={{ borderColor: 'var(--border)' }}>
+                <div key={r.id} className="flex items-center justify-between p-3 rounded border" style={{ borderColor: 'var(--border)' }}>
                   <div>
                     <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>{subject?.name ?? r.subjectId}</span>
                     <span className="text-xs ml-2" style={{ color: 'var(--text-secondary)' }}>

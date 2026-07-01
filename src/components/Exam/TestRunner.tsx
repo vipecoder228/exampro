@@ -186,7 +186,7 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
                     navigator.clipboard.writeText(text);
                   }
                 }}
-                className="mt-2 text-sm underline"
+                className="mt-2 text-sm underline min-h-[44px] py-2 inline-flex items-center"
                 style={{ color: 'var(--accent)' }}
               >
                 Поделиться результатом
@@ -205,7 +205,7 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between p-3 rounded-lg border" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
-        <h3 className="font-serif font-bold" style={{ color: 'var(--primary)' }}>{title}</h3>
+        <h3 className="font-serif font-bold truncate min-w-0" style={{ color: 'var(--primary)' }}>{title}</h3>
         <div className="flex items-center gap-4">
           <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
             {current + 1} / {selectedQuestions.length}
@@ -219,12 +219,12 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
         </div>
       </div>
 
-      <div className="flex gap-1.5 flex-wrap">
+      <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
         {selectedQuestions.map((q, i) => (
           <button
             key={q.id}
             onClick={() => setCurrent(i)}
-            className="w-8 h-8 rounded-full text-xs font-medium border transition-colors"
+            className="w-8 h-8 shrink-0 rounded-full text-xs font-medium border transition-colors"
             style={{
               background: i === current ? 'var(--accent)' : answers[q.id] ? 'var(--color-success)' : 'transparent',
               color: i === current || answers[q.id] ? '#fff' : 'var(--text-secondary)',

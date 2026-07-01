@@ -95,7 +95,10 @@ body {
 
 /* Better mobile tap targets */
 @media (max-width: 640px) {
-  button, a, [role="button"] {
+  button, [role="button"] {
+    min-height: 44px;
+  }
+  a.block, a.inline-block, nav a, header a, footer a {
     min-height: 44px;
   }
 }

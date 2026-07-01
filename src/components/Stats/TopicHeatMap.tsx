@@ -34,7 +34,7 @@ export default function TopicHeatMap({ topics, questions, subjectId, examType = 
       <h3 className="font-serif text-sm font-bold mb-3" style={{ color: 'var(--text-secondary)' }}>
         Прогресс по темам
       </h3>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex gap-1.5 overflow-x-auto pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
         {topics.map((topic) => {
           const stats = progress.get(topic.id);
           const percent = stats?.percent ?? 0;
@@ -56,7 +56,7 @@ export default function TopicHeatMap({ topics, questions, subjectId, examType = 
           );
         })}
       </div>
-      <div className="flex items-center gap-3 mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded" style={{ background: '#16A34A' }} /> 80%+</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded" style={{ background: '#F59E0B' }} /> 60-79%</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded" style={{ background: '#F97316' }} /> 40-59%</span>

@@ -41,14 +41,14 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <button
             onClick={() => {
               const modes: Array<'light' | 'dark' | 'auto'> = ['light', 'dark', 'auto'];
               const idx = modes.indexOf(themeMode);
               setThemeMode(modes[(idx + 1) % 3]);
             }}
-            className="p-2 rounded-lg hover:opacity-80 transition-colors"
+            className="p-2.5 rounded-lg hover:opacity-80 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             style={{ color: 'var(--text-secondary)' }}
             title={`Тема: ${themeMode === 'auto' ? 'авто' : themeMode === 'dark' ? 'тёмная' : 'светлая'}`}
           >
@@ -57,7 +57,7 @@ export default function Header() {
 
           <button
             onClick={toggleSound}
-            className="p-2 rounded-lg hover:opacity-80 transition-colors"
+            className="p-2.5 rounded-lg hover:opacity-80 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             style={{ color: 'var(--text-secondary)' }}
             title={soundEnabled ? 'Выключить звук' : 'Включить звук'}
           >
@@ -65,7 +65,7 @@ export default function Header() {
           </button>
 
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
             onClick={() => setMobileOpen(!mobileOpen)}
             style={{ color: 'var(--text-secondary)' }}
           >
@@ -82,7 +82,7 @@ export default function Header() {
                 key={link.to}
                 to={link.to}
                 onClick={() => setMobileOpen(false)}
-                className="text-sm font-medium py-2"
+                className="text-sm font-medium py-3"
                 style={{ color: location.pathname === link.to ? 'var(--accent)' : 'var(--text-secondary)' }}
               >
                 {link.label}

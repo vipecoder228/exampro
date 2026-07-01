@@ -16,7 +16,7 @@ export default function Calculator() {
   const testScore = primary ? primaryToTestScore(examKey, Number(primary)) : 0;
 
   return (
-    <div className="border rounded-lg p-6" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+    <div className="border rounded-lg p-4 sm:p-6" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
       <h3 className="font-serif font-bold mb-4" style={{ color: 'var(--primary)' }}>Калькулятор баллов</h3>
 
       <div className="flex flex-col gap-4">
@@ -25,7 +25,7 @@ export default function Calculator() {
           <select
             value={examKey}
             onChange={(e) => { setExamKey(e.target.value); setPrimary(''); }}
-            className="w-full px-3 py-2 rounded-md border text-sm outline-none"
+            className="w-full px-3 py-2.5 rounded-md border text-sm outline-none min-h-[44px]"
             style={{ background: 'var(--card)', borderColor: 'var(--border)', color: 'var(--text)' }}
           >
             {examKeys.map((e) => (
@@ -53,7 +53,7 @@ export default function Calculator() {
         {primary && Number(primary) >= 0 && Number(primary) <= maxPrimary && (
           <div className="text-center p-4 rounded-lg" style={{ background: 'var(--border)' }}>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Тестовый балл</p>
-            <p className="text-4xl font-bold" style={{ color: testScore >= 60 ? 'var(--color-success)' : testScore >= 40 ? '#F59E0B' : 'var(--color-error)' }}>
+            <p className="text-3xl sm:text-4xl font-bold" style={{ color: testScore >= 60 ? 'var(--color-success)' : testScore >= 40 ? '#F59E0B' : 'var(--color-error)' }}>
               {testScore}
             </p>
           </div>

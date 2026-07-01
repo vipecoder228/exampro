@@ -43,13 +43,13 @@ export default function ChatBot({ context }: Props) {
 
       {open && (
         <div
-          className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] h-[500px] rounded-xl shadow-xl border flex flex-col z-40"
+          className="fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 sm:max-w-[calc(100vw-3rem)] h-[70vh] max-h-[500px] rounded-xl shadow-xl border flex flex-col z-40"
           style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'var(--border)' }}>
             <h3 className="font-serif font-bold text-sm" style={{ color: 'var(--primary)' }}>ИИ-помощник</h3>
-            <button onClick={clear} className="p-1 hover:opacity-70" style={{ color: 'var(--text-secondary)' }} title="Очистить чат">
-              <Trash2 size={14} />
+            <button onClick={clear} className="p-2 hover:opacity-70 min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ color: 'var(--text-secondary)' }} title="Очистить чат">
+              <Trash2 size={16} />
             </button>
           </div>
 

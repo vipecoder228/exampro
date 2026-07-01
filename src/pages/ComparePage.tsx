@@ -117,7 +117,7 @@ export default function ComparePage() {
       {friendStats && (
         <div className="border rounded-lg p-6" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
           <h3 className="font-serif font-bold text-lg mb-4" style={{ color: 'var(--primary)' }}>Сравнение</h3>
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
             <div>
               <p className="text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Метрика</p>
             </div>

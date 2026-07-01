@@ -79,6 +79,24 @@ export default function SubjectPage() {
     <div className="flex gap-6 max-w-6xl mx-auto">
       <Sidebar />
       <main className="flex-1 min-w-0">
+        <div className="lg:hidden overflow-x-auto mb-4 -mx-4 px-4">
+          <div className="flex gap-2 pb-2" style={{ minWidth: 'min-content' }}>
+            {subjects.map((s) => (
+              <Link
+                key={s.id}
+                to={`/subject/${s.id}?type=${examType}`}
+                className="px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all shrink-0"
+                style={{
+                  background: s.id === id ? 'var(--accent)' : 'var(--card)',
+                  color: s.id === id ? '#fff' : 'var(--text-secondary)',
+                  border: `1px solid ${s.id === id ? 'var(--accent)' : 'var(--border)'}`,
+                }}
+              >
+                {s.name}
+              </Link>
+            ))}
+          </div>
+        </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -89,7 +107,7 @@ export default function SubjectPage() {
                     <button
                       key={t}
                       onClick={() => toggleExamType(t)}
-                      className="px-2 py-0.5 rounded-full text-xs font-bold transition-all"
+                      className="px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px]"
                       style={{
                         background: examType === t ? 'var(--accent)' : 'var(--border)',
                         color: examType === t ? '#fff' : 'var(--text-secondary)',
@@ -107,19 +125,19 @@ export default function SubjectPage() {
           </div>
           <div className="flex gap-2 flex-wrap">
             <Link to={`/test/${subject.id}?type=${examType}`}>
-              <Button>Пробный вариант</Button>
+              <Button size="sm">Пробный вариант</Button>
             </Link>
             <Link to={`/subject/${subject.id}/practice?type=${examType}`}>
-              <Button variant="secondary">Тренировка</Button>
+              <Button variant="secondary" size="sm">Тренировка</Button>
             </Link>
             <Link to={`/blitz/${subject.id}?type=${examType}`}>
-              <Button variant="secondary">Блitz</Button>
+              <Button variant="secondary" size="sm">Блitz</Button>
             </Link>
             <Link to={`/subject/${subject.id}/learn?type=${examType}`}>
-              <Button variant="secondary">Учить</Button>
+              <Button variant="secondary" size="sm">Учить</Button>
             </Link>
             <Link to={`/formulas/${subject.id}?type=${examType}`}>
-              <Button variant="secondary">Формулы</Button>
+              <Button variant="secondary" size="sm">Формулы</Button>
             </Link>
           </div>
         </div>
