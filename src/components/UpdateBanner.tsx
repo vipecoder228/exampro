@@ -41,12 +41,11 @@ export default function UpdateBanner() {
       <div className="flex items-center gap-2">
         <a
           href={updateUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+          download="ExamPro.apk"
           className="px-3 py-1 rounded-md text-xs font-bold transition-opacity hover:opacity-80"
           style={{ background: '#fff', color: 'var(--accent)' }}
         >
-          Скачать
+          Скачать APK
         </a>
         <button onClick={dismiss} className="p-1 hover:opacity-70">
           <X size={14} />
