@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ExamPro</string>
+    <string name="title_activity_main">ExamPro</string>
+    <string name="package_name">com.exampro.app</string>
+    <string name="custom_url_scheme">com.exampro.app</string>
+</resources>
