@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Question } from '../../types';
 import Button from '../ui/Button';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Sparkles } from 'lucide-react';
 import { playCorrect, playWrong } from '../../lib/sounds';
 import { useThemeStore } from '../../store/useThemeStore';
 
@@ -12,9 +12,11 @@ interface Props {
   userAnswer?: string | string[];
   timePerQuestion?: number;
   mode?: 'test' | 'practice' | 'learn';
+  onExplainError?: (question: string, userAnswer: string, correctAnswer: string) => void;
+  explanationLoading?: boolean;
 }
 
-export default function QuestionCard({ question, onAnswer, showResult, userAnswer, timePerQuestion, mode = 'test' }: Props) {
+export default function QuestionCard({ question, onAnswer, showResult, userAnswer, timePerQuestion, mode = 'test', onExplainError, explanationLoading }: Props) {
   const [selected, setSelected] = useState<string | string[]>('');
   const [inputValue, setInputValue] = useState('');
   const [timeLeft, setTimeLeft] = useState(timePerQuestion ?? 0);
@@ -188,6 +190,21 @@ export default function QuestionCard({ question, onAnswer, showResult, userAnswe
             <p className="mt-1 font-medium" style={{ color: 'var(--text)' }}>
               Правильный ответ: {Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer}
             </p>
+          )}
+          {!isCorrect && onExplainError && (
+            <button
+              onClick={() => onExplainError(
+                question.text,
+                Array.isArray(userAnswer) ? userAnswer.join(', ') : String(userAnswer ?? ''),
+                Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : String(question.correctAnswer)
+              )}
+              disabled={explanationLoading}
+              className="mt-2 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors"
+              style={{ background: 'var(--accent)', color: '#fff', opacity: explanationLoading ? 0.6 : 1 }}
+            >
+              <Sparkles size={12} />
+              {explanationLoading ? 'Думаю...' : 'Объяснить с ИИ'}
+            </button>
           )}
         </div>
       )}

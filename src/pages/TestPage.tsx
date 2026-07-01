@@ -1,4 +1,5 @@
 import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 import { subjects } from '../data/subjects';
 import { mathQuestions as egeMath } from '../data/ege/math';
 import { russianQuestions as egeRussian } from '../data/ege/russian';
@@ -44,6 +45,7 @@ export default function TestPage() {
   const questions = examType === 'oge' ? (ogeQuestionMap[id ?? ''] ?? []) : (egeQuestionMap[id ?? ''] ?? []);
   const examKey = `${examType}-${subject?.id}`;
   const label = examType === 'oge' ? 'ОГЭ' : 'ЕГЭ';
+  const [timePerQuestion, setTimePerQuestion] = useState<number | undefined>(undefined);
 
   if (!subject) {
     return (
@@ -74,12 +76,33 @@ export default function TestPage() {
         <ArrowLeft size={16} />
         {subject.name}
       </Link>
+      <div className="border rounded-lg p-6 mb-4" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+        <h3 className="font-serif font-bold mb-3" style={{ color: 'var(--primary)' }}>Настройки теста</h3>
+        <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>Время на каждый вопрос (необязательно):</p>
+        <div className="flex gap-2">
+          {[undefined, 30, 60, 90].map((t) => (
+            <button
+              key={String(t)}
+              onClick={() => setTimePerQuestion(t)}
+              className="px-4 py-2 rounded-lg text-sm font-medium border transition-all"
+              style={{
+                background: timePerQuestion === t ? 'var(--accent)' : 'transparent',
+                color: timePerQuestion === t ? '#fff' : 'var(--text)',
+                borderColor: timePerQuestion === t ? 'var(--accent)' : 'var(--border)',
+              }}
+            >
+              {t ? `${t}с` : 'Без таймера'}
+            </button>
+          ))}
+        </div>
+      </div>
       <TestRunner
         questions={questions}
         subjectId={subject.id}
         examKey={examKey}
-        title={`Пробный вариант ({label}) — ${subject.name}`}
+        title={`Пробный вариант (${label}) — ${subject.name}`}
         timeMinutes={examType === 'oge' ? 45 : 60}
+        timePerQuestion={timePerQuestion}
       />
     </div>
   );

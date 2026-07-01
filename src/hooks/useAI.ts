@@ -6,7 +6,7 @@ interface Message {
   content: string;
 }
 
-export function useAI(context?: { subject?: string; topic?: string; question?: string }) {
+export function useAI(context?: { subject?: string; topic?: string; question?: string; wrongAnswer?: string; correctAnswer?: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

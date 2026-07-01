@@ -19,6 +19,7 @@ import ReviewPage from './pages/ReviewPage';
 import BlitzPage from './pages/BlitzPage';
 import FormulasPage from './pages/FormulasPage';
 import ComparePage from './pages/ComparePage';
+import LearnPage from './pages/LearnPage';
 
 export default function App() {
   const dark = useThemeStore((s) => s.dark);
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/subject/:id/topic/:topicId" element={<TopicPage />} />
             <Route path="/test/:id" element={<TestPage />} />
             <Route path="/subject/:id/practice" element={<PracticePage />} />
+            <Route path="/subject/:id/learn" element={<LearnPage />} />
             <Route path="/exam/:id" element={<ExamModePage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/sources" element={<SourcesPage />} />

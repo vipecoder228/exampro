@@ -4,6 +4,7 @@ import QuestionCard from './QuestionCard';
 import Button from '../ui/Button';
 import { primaryToTestScore } from '../../lib/scoreTable';
 import { useProgressStore } from '../../store/useProgressStore';
+import { sendAIMessage, buildSystemPrompt } from '../../lib/ai';
 
 interface Props {
   questions: Question[];
@@ -11,6 +12,7 @@ interface Props {
   examKey: string;
   title: string;
   timeMinutes?: number;
+  timePerQuestion?: number;
   mode?: 'test' | 'practice';
   adaptive?: boolean;
   onComplete?: () => void;
@@ -19,7 +21,7 @@ interface Props {
 const norm = (v: string | string[]) =>
   Array.isArray(v) ? v.map(s => s.trim().toLowerCase()).sort().join('|') : String(v).trim().toLowerCase();
 
-export default function TestRunner({ questions, subjectId, examKey, title, timeMinutes = 60, mode = 'test', adaptive = false, onComplete }: Props) {
+export default function TestRunner({ questions, subjectId, examKey, title, timeMinutes = 60, timePerQuestion, mode = 'test', adaptive = false, onComplete }: Props) {
   const isPractice = mode === 'practice';
   const results = useProgressStore((s) => s.results);
   const [current, setCurrent] = useState(0);
@@ -27,6 +29,9 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timeMinutes * 60);
   const [started, setStarted] = useState(false);
+  const [questionResults, setQuestionResults] = useState<Record<string, boolean>>({});
+  const [aiExplanation, setAiExplanation] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const addResult = useProgressStore((s) => s.addResult);
   const updateStreak = useProgressStore((s) => s.updateStreak);
   const subjectResults = results.filter((r) => r.subjectId === subjectId);
@@ -94,7 +99,7 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
       <div className="border rounded-lg p-8 text-center" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
         <h3 className="font-serif font-bold text-2xl mb-2" style={{ color: 'var(--primary)' }}>{title}</h3>
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-          {adaptive ? 'Адаптивный подбор · ' : ''}{questions.length} вопросов{isPractice ? '' : ` · ${timeMinutes} минут`}
+          {adaptive ? 'Адаптивный подбор · ' : ''}{questions.length} вопросов{isPractice ? '' : ` · ${timeMinutes} минут`}{timePerQuestion ? ` · ${timePerQuestion} сек/вопрос` : ''}
         </p>
         <Button size="lg" onClick={() => setStarted(true)}>
           {isPractice ? 'Начать тренировку' : 'Начать тест'}
@@ -105,6 +110,41 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
 
   const handleAnswer = (questionId: string, answer: string | string[]) => {
     setAnswers((prev) => ({ ...prev, [questionId]: answer }));
+    const q = selectedQuestions.find((q) => q.id === questionId);
+    if (q) {
+      const isCorrect = norm(answer) === norm(q.correctAnswer);
+      setQuestionResults((prev) => ({ ...prev, [questionId]: isCorrect }));
+    }
+    setAiExplanation(null);
+    if (timePerQuestion && current < selectedQuestions.length - 1) {
+      setTimeout(() => setCurrent((c) => c + 1), 300);
+    }
+  };
+
+  const handleExplainError = async (questionText: string, userAns: string, correctAns: string) => {
+    const apiKey = localStorage.getItem('exampro-ai-key');
+    if (!apiKey) {
+      setAiExplanation('Введите API-ключ OpenAI в настройках AI-помощника.');
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const prompt = buildSystemPrompt({
+        subject: title,
+        question: questionText,
+        wrongAnswer: userAns,
+        correctAnswer: correctAns,
+      });
+      const reply = await sendAIMessage([
+        { role: 'system', content: prompt },
+        { role: 'user', content: `Объясни почему мой ответ "${userAns}" неправильный и как прийти к правильному ответу "${correctAns}".` },
+      ], apiKey);
+      setAiExplanation(reply);
+    } catch {
+      setAiExplanation('Не удалось получить объяснение. Попробуйте позже.');
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   const handleSubmit = () => {
@@ -201,8 +241,18 @@ export default function TestRunner({ questions, subjectId, examKey, title, timeM
         question={selectedQuestions[current]}
         onAnswer={(answer) => handleAnswer(selectedQuestions[current].id, answer)}
         userAnswer={answers[selectedQuestions[current].id]}
-        showResult={false}
+        showResult={!!timePerQuestion ? !!questionResults[selectedQuestions[current].id] : false}
+        timePerQuestion={timePerQuestion}
+        onExplainError={handleExplainError}
+        explanationLoading={aiLoading}
       />
+
+      {aiExplanation && (
+        <div className="border rounded-lg p-4" style={{ background: 'var(--card)', borderColor: 'var(--accent)' }}>
+          <p className="text-xs font-medium mb-2" style={{ color: 'var(--accent)' }}>Объяснение от ИИ:</p>
+          <p className="text-sm" style={{ color: 'var(--text)' }}>{aiExplanation}</p>
+        </div>
+      )}
 
       <div className="flex gap-2">
         {current > 0 && (

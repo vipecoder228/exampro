@@ -115,6 +115,9 @@ export default function SubjectPage() {
             <Link to={`/blitz/${subject.id}?type=${examType}`}>
               <Button variant="secondary">Блitz</Button>
             </Link>
+            <Link to={`/subject/${subject.id}/learn?type=${examType}`}>
+              <Button variant="secondary">Учить</Button>
+            </Link>
             <Link to={`/formulas/${subject.id}?type=${examType}`}>
               <Button variant="secondary">Формулы</Button>
             </Link>
