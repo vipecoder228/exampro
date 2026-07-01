@@ -25,6 +25,8 @@ interface ProgressState {
   getWrongAnswers: () => WrongAnswer[];
   setWeeklyGoal: (goal: number) => void;
   getWeeklyDone: () => number;
+  exportAll: () => string;
+  importData: (json: string) => boolean;
 }
 
 export const useProgressStore = create<ProgressState>()(
@@ -103,6 +105,40 @@ export const useProgressStore = create<ProgressState>()(
         const currentWeekStart = getWeekStart(new Date());
         if (weekStart !== currentWeekStart) return 0;
         return weeklyDone;
+      },
+
+      exportAll: () => {
+        const { results, bookmarks, streak, lastActiveDate, weeklyGoal, weeklyDone, weekStart } = get();
+        const themeData = localStorage.getItem('exampro-theme');
+        return JSON.stringify({
+          version: '1.1.0',
+          exportedAt: new Date().toISOString(),
+          progress: { results, bookmarks, streak, lastActiveDate, weeklyGoal, weeklyDone, weekStart },
+          theme: themeData ? JSON.parse(themeData) : null,
+        }, null, 2);
+      },
+
+      importData: (json) => {
+        try {
+          const data = JSON.parse(json);
+          if (!data.progress) return false;
+          const { results, bookmarks, streak, lastActiveDate, weeklyGoal, weeklyDone, weekStart } = data.progress;
+          set({
+            results: results ?? [],
+            bookmarks: bookmarks ?? [],
+            streak: streak ?? 0,
+            lastActiveDate: lastActiveDate ?? '',
+            weeklyGoal: weeklyGoal ?? 5,
+            weeklyDone: weeklyDone ?? 0,
+            weekStart: weekStart ?? '',
+          });
+          if (data.theme) {
+            localStorage.setItem('exampro-theme', JSON.stringify(data.theme));
+          }
+          return true;
+        } catch {
+          return false;
+        }
       },
     }),
     { name: 'exampro-progress' }

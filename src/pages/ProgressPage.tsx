@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useRef, useState } from 'react';
 import ProgressChart from '../components/Stats/ProgressChart';
 import HeatMap from '../components/Stats/HeatMap';
 import ScorePredict from '../components/Stats/ScorePredict';
 import RatingTable from '../components/Leaderboard/RatingTable';
 import { useProgressStore } from '../store/useProgressStore';
 import { subjects } from '../data/subjects';
-import { ArrowLeft, Bookmark } from 'lucide-react';
+import { ArrowLeft, Bookmark, Download, Upload } from 'lucide-react';
 
 export default function ProgressPage() {
   const results = useProgressStore((s) => s.results);
@@ -13,7 +14,11 @@ export default function ProgressPage() {
   const weeklyGoal = useProgressStore((s) => s.weeklyGoal);
   const getWeeklyDone = useProgressStore((s) => s.getWeeklyDone);
   const setWeeklyGoal = useProgressStore((s) => s.setWeeklyGoal);
+  const exportAll = useProgressStore((s) => s.exportAll);
+  const importData = useProgressStore((s) => s.importData);
   const weeklyDone = getWeeklyDone();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -47,6 +52,64 @@ export default function ProgressPage() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="mb-8 border rounded-lg p-4" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+        <h3 className="font-serif font-bold mb-3" style={{ color: 'var(--primary)' }}>Данные</h3>
+        <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>
+          Сохрани прогресс или перенеси на другое устройство
+        </p>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => {
+              const json = exportAll();
+              const blob = new Blob([json], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `exampro-backup-${new Date().toISOString().split('T')[0]}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border transition-colors hover:opacity-80"
+            style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
+          >
+            <Download size={14} />
+            Экспорт
+          </button>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border transition-colors hover:opacity-80"
+            style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
+          >
+            <Upload size={14} />
+            Импорт
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => {
+                const ok = importData(reader.result as string);
+                setImportStatus(ok ? 'success' : 'error');
+                setTimeout(() => setImportStatus('idle'), 3000);
+              };
+              reader.readAsText(file);
+              e.target.value = '';
+            }}
+          />
+        </div>
+        {importStatus === 'success' && (
+          <p className="text-xs mt-2" style={{ color: 'var(--color-success)' }}>Данные успешно загружены!</p>
+        )}
+        {importStatus === 'error' && (
+          <p className="text-xs mt-2" style={{ color: 'var(--color-error)' }}>Ошибка: файл повреждён или не подходит</p>
+        )}
       </div>
 
       <div className="mb-8">
