@@ -35,15 +35,19 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      - name: Sync Capacitor
-        run: npx cap sync android
+      - name: Init Capacitor
+        run: |
+          npx cap init "ExamPro" "com.exampro.app" --web-dir dist
+          npx cap add android
 
-      - name: Make Gradlew executable
-        run: chmod +x android/gradlew
+      - name: Sync web assets
+        run: npx cap sync android
 
       - name: Build APK
         working-directory: android
-        run: ./gradlew assembleDebug
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Get version
         id: version
