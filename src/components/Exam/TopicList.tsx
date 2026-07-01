@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 import type { Topic } from '../../types';
 import Card from '../ui/Card';
 
-export default function TopicList({ topics, subjectId }: { topics: Topic[]; subjectId: string }) {
+export default function TopicList({ topics, subjectId, examType = 'ege' }: { topics: Topic[]; subjectId: string; examType?: string }) {
   return (
     <div className="flex flex-col gap-3">
       {topics.map((topic, i) => (
-        <Link key={topic.id} to={`/subject/${subjectId}/topic/${topic.id}`} className="block">
+        <Link key={topic.id} to={`/subject/${subjectId}/topic/${topic.id}?type=${examType}`} className="block">
           <Card hover>
             <div className="flex items-center gap-3">
               <span

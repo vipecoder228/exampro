@@ -24,26 +24,24 @@ import TestRunner from '../components/Exam/TestRunner';
 import { ArrowLeft } from 'lucide-react';
 import type { ExamType } from '../types';
 
-const egeQuestionMap: Record<string, typeof egeMath> = {
+const egeMap: Record<string, typeof egeMath> = {
   math: egeMath, russian: egeRussian, physics: egePhysics, chemistry: egeChemistry,
   biology: egeBiology, informatics: egeInformatics, history: egeHistory,
   social: egeSocial, literature: egeLiterature, geography: egeGeography, english: egeEnglish,
 };
 
-const ogeQuestionMap: Record<string, typeof ogeMath> = {
+const ogeMap: Record<string, typeof ogeMath> = {
   math: ogeMath, russian: ogeRussian, physics: ogePhysics, chemistry: ogeChemistry,
   biology: ogeBiology, history: ogeHistory,
   social: ogeSocial, geography: ogeGeography, english: ogeEnglish,
 };
 
-export default function TestPage() {
+export default function PracticePage() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const examType: ExamType = (searchParams.get('type') as ExamType) || 'ege';
   const subject = subjects.find((s) => s.id === id);
-  const questions = examType === 'oge' ? (ogeQuestionMap[id ?? ''] ?? []) : (egeQuestionMap[id ?? ''] ?? []);
-  const examKey = `${examType}-${subject?.id}`;
-  const label = examType === 'oge' ? 'ОГЭ' : 'ЕГЭ';
+  const questions = examType === 'oge' ? (ogeMap[id ?? ''] ?? []) : (egeMap[id ?? ''] ?? []);
 
   if (!subject) {
     return (
@@ -62,7 +60,7 @@ export default function TestPage() {
           {subject.name}
         </Link>
         <div className="text-center py-12 border rounded-lg" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
-          <p style={{ color: 'var(--text-secondary)' }}>Тесты ({label}) для этого предмета скоро будут добавлены</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Вопросы для тренировки скоро будут добавлены</p>
         </div>
       </div>
     );
@@ -77,9 +75,9 @@ export default function TestPage() {
       <TestRunner
         questions={questions}
         subjectId={subject.id}
-        examKey={examKey}
-        title={`Пробный вариант ({label}) — ${subject.name}`}
-        timeMinutes={examType === 'oge' ? 45 : 60}
+        examKey={`${examType}-${subject.id}`}
+        title={`Тренировка — ${subject.name}`}
+        mode="practice"
       />
     </div>
   );

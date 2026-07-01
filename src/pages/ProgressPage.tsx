@@ -10,6 +10,10 @@ import { ArrowLeft, Bookmark } from 'lucide-react';
 export default function ProgressPage() {
   const results = useProgressStore((s) => s.results);
   const bookmarks = useProgressStore((s) => s.bookmarks);
+  const weeklyGoal = useProgressStore((s) => s.weeklyGoal);
+  const getWeeklyDone = useProgressStore((s) => s.getWeeklyDone);
+  const setWeeklyGoal = useProgressStore((s) => s.setWeeklyGoal);
+  const weeklyDone = getWeeklyDone();
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -20,9 +24,48 @@ export default function ProgressPage() {
 
       <h1 className="font-serif text-2xl font-bold mb-6" style={{ color: 'var(--primary)' }}>Мой прогресс</h1>
 
+      <div className="mb-8 border rounded-lg p-4" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>Цель недели</span>
+          <span className="text-sm font-bold" style={{ color: 'var(--accent)' }}>{weeklyDone} / {weeklyGoal}</span>
+        </div>
+        <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+          <div className="h-full rounded-full transition-all" style={{
+            width: `${Math.min(100, (weeklyDone / weeklyGoal) * 100)}%`,
+            background: weeklyDone >= weeklyGoal ? 'var(--color-success)' : 'var(--accent)',
+          }} />
+        </div>
+        <div className="flex gap-2 mt-3">
+          {[3, 5, 7, 10].map((g) => (
+            <button key={g} onClick={() => setWeeklyGoal(g)}
+              className="px-2 py-1 rounded text-xs font-medium transition-all"
+              style={{
+                background: weeklyGoal === g ? 'var(--accent)' : 'var(--border)',
+                color: weeklyGoal === g ? '#fff' : 'var(--text-secondary)',
+              }}>
+              {g}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="mb-8">
         <RatingTable />
       </div>
+
+      {results.length > 0 && (() => {
+        const avgScore = Math.round(results.reduce((s, r) => s + (r.score / r.maxScore) * 100, 0) / results.length);
+        const percentile = Math.min(99, Math.round(avgScore * 0.85 + Math.log(results.length + 1) * 5));
+        return (
+          <div className="mb-8 border rounded-lg p-6 text-center" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+            <p className="text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>Твое место среди учеников</p>
+            <p className="text-4xl font-bold mb-1" style={{ color: 'var(--accent)' }}>Лучше {percentile}%</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+              на основе {results.length} тестов · средний балл {avgScore}%
+            </p>
+          </div>
+        );
+      })()}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="border rounded-lg p-4" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>

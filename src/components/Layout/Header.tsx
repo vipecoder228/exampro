@@ -1,4 +1,4 @@
-import { Sun, Moon, BookOpen, Menu, X } from 'lucide-react';
+import { Sun, Moon, BookOpen, Menu, X, Volume2, VolumeX } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useState } from 'react';
@@ -6,12 +6,15 @@ import { useState } from 'react';
 const navLinks = [
   { to: '/', label: 'Главная' },
   { to: '/progress', label: 'Прогресс' },
+  { to: '/review', label: 'Повторение' },
+  { to: '/leaderboard', label: 'Достижения' },
+  { to: '/compare', label: 'Друг' },
   { to: '/sources', label: 'Источники' },
   { to: '/calculator', label: 'Калькулятор' },
 ];
 
 export default function Header() {
-  const { dark, toggle } = useThemeStore();
+  const { dark, soundEnabled, toggleSound, themeMode, setThemeMode } = useThemeStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -40,12 +43,25 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={toggle}
+            onClick={() => {
+              const modes: Array<'light' | 'dark' | 'auto'> = ['light', 'dark', 'auto'];
+              const idx = modes.indexOf(themeMode);
+              setThemeMode(modes[(idx + 1) % 3]);
+            }}
             className="p-2 rounded-lg hover:opacity-80 transition-colors"
             style={{ color: 'var(--text-secondary)' }}
-            title={dark ? 'Светлая тема' : 'Тёмная тема'}
+            title={`Тема: ${themeMode === 'auto' ? 'авто' : themeMode === 'dark' ? 'тёмная' : 'светлая'}`}
           >
-            {dark ? <Sun size={20} /> : <Moon size={20} />}
+            {themeMode === 'auto' ? <Moon size={20} className="opacity-50" /> : dark ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
+          <button
+            onClick={toggleSound}
+            className="p-2 rounded-lg hover:opacity-80 transition-colors"
+            style={{ color: 'var(--text-secondary)' }}
+            title={soundEnabled ? 'Выключить звук' : 'Включить звук'}
+          >
+            {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
 
           <button

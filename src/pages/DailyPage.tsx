@@ -5,10 +5,30 @@ import { pickDailyQuestions } from '../lib/dailySeed';
 import { mathQuestions } from '../data/ege/math';
 import { russianQuestions } from '../data/ege/russian';
 import { physicsQuestions } from '../data/ege/physics';
+import { chemistryQuestions } from '../data/ege/chemistry';
+import { biologyQuestions } from '../data/ege/biology';
+import { informaticsQuestions } from '../data/ege/informatics';
+import { historyQuestions } from '../data/ege/history';
+import { socialQuestions } from '../data/ege/social';
+import { literatureQuestions } from '../data/ege/literature';
+import { geographyQuestions } from '../data/ege/geography';
+import { englishQuestions } from '../data/ege/english';
 import QuestionCard from '../components/Exam/QuestionCard';
 import { useState } from 'react';
 
-const allQuestions = [...mathQuestions, ...russianQuestions, ...physicsQuestions];
+const allQuestions = [
+  ...mathQuestions,
+  ...russianQuestions,
+  ...physicsQuestions,
+  ...chemistryQuestions,
+  ...biologyQuestions,
+  ...informaticsQuestions,
+  ...historyQuestions,
+  ...socialQuestions,
+  ...literatureQuestions,
+  ...geographyQuestions,
+  ...englishQuestions,
+];
 
 export default function DailyPage() {
   const streak = useProgressStore((s) => s.streak);
@@ -27,7 +47,8 @@ export default function DailyPage() {
 
   const score = dailyQuestions.filter((q) => {
     const userAns = answers[q.id];
-    return userAns && String(userAns).trim().toLowerCase() === String(q.correctAnswer).trim().toLowerCase();
+    const norm = (v: string | string[]) => Array.isArray(v) ? v.map(s => s.trim().toLowerCase()).sort().join('|') : String(v).trim().toLowerCase();
+    return userAns && norm(userAns) === norm(q.correctAnswer);
   }).length;
 
   return (

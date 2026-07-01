@@ -10,7 +10,7 @@ interface CardProps {
 export default function Card({ children, className = '', hover = false, onClick }: CardProps) {
   return (
     <div
-      className={`rounded-lg shadow-sm border p-5 ${hover ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className}`}
+      className={`rounded-xl shadow-sm border p-5 animate-fadeIn ${hover ? 'cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200' : ''} ${className}`}
       style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
       onClick={onClick}
     >
