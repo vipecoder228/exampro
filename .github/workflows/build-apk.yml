@@ -35,13 +35,10 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      - name: Init Capacitor
+      - name: Add Android platform
         run: |
-          npx cap init "ExamPro" "com.exampro.app" --web-dir dist
-          npx cap add android
-
-      - name: Sync web assets
-        run: npx cap sync android
+          npx cap add android || true
+          npx cap sync android
 
       - name: Build APK
         working-directory: android
