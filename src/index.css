@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Merriweather', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-bg: #F8F9FA;
+  --color-card: #FFFFFF;
+  --color-primary: #1E3A5F;
+  --color-accent: #2563EB;
+  --color-success: #16A34A;
+  --color-error: #DC2626;
+  --color-text: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-border: #E5E7EB;
+
+  --color-dark-bg: #0F172A;
+  --color-dark-card: #1E293B;
+  --color-dark-primary: #93C5FD;
+  --color-dark-accent: #60A5FA;
+  --color-dark-text: #E2E8F0;
+  --color-dark-text-secondary: #94A3B8;
+  --color-dark-border: #334155;
+}
+
+:root {
+  --bg: var(--color-bg);
+  --card: var(--color-card);
+  --primary: var(--color-primary);
+  --accent: var(--color-accent);
+  --text: var(--color-text);
+  --text-secondary: var(--color-text-secondary);
+  --border: var(--color-border);
+}
+
+.dark {
+  --bg: var(--color-dark-bg);
+  --card: var(--color-dark-card);
+  --primary: var(--color-dark-primary);
+  --accent: var(--color-dark-accent);
+  --text: var(--color-dark-text);
+  --text-secondary: var(--color-dark-text-secondary);
+  --border: var(--color-dark-border);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
