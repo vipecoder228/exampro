@@ -20,6 +20,7 @@ import BlitzPage from './pages/BlitzPage';
 import FormulasPage from './pages/FormulasPage';
 import ComparePage from './pages/ComparePage';
 import LearnPage from './pages/LearnPage';
+import UpdateBanner from './components/UpdateBanner';
 
 export default function App() {
   const dark = useThemeStore((s) => s.dark);
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
+        <UpdateBanner />
         <Header />
         <main className="flex-1 px-4 py-8">
           <Routes>
