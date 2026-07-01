@@ -17,6 +17,7 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import PracticePage from './pages/PracticePage';
 import ReviewPage from './pages/ReviewPage';
 import BlitzPage from './pages/BlitzPage';
+import ChaosPage from './pages/ChaosPage';
 import FormulasPage from './pages/FormulasPage';
 import ComparePage from './pages/ComparePage';
 import LearnPage from './pages/LearnPage';
@@ -62,6 +63,7 @@ export default function App() {
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/review" element={<ReviewPage />} />
             <Route path="/blitz/:id" element={<BlitzPage />} />
+            <Route path="/chaos/:id" element={<ChaosPage />} />
             <Route path="/formulas/:id" element={<FormulasPage />} />
             <Route path="/compare" element={<ComparePage />} />
           </Routes>

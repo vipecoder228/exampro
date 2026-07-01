@@ -27,6 +27,7 @@ import Badge from '../components/ui/Badge';
 import ProgressBar from '../components/ui/ProgressBar';
 import { useProgressStore } from '../store/useProgressStore';
 import Button from '../components/ui/Button';
+import { Skull } from 'lucide-react';
 import type { ExamType } from '../types';
 
 const egeTopicMap: Record<string, typeof egeMathT> = {
@@ -132,6 +133,15 @@ export default function SubjectPage() {
             </Link>
             <Link to={`/blitz/${subject.id}?type=${examType}`}>
               <Button variant="secondary" size="sm">Блitz</Button>
+            </Link>
+            <Link to={`/chaos/${subject.id}?type=${examType}`}>
+              <button
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all min-h-[36px] flex items-center gap-1.5"
+                style={{ background: '#EF4444', color: '#fff' }}
+              >
+                <Skull size={14} />
+                Хаос
+              </button>
             </Link>
             <Link to={`/subject/${subject.id}/learn?type=${examType}`}>
               <Button variant="secondary" size="sm">Учить</Button>
