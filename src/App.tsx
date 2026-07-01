@@ -21,6 +21,7 @@ import FormulasPage from './pages/FormulasPage';
 import ComparePage from './pages/ComparePage';
 import LearnPage from './pages/LearnPage';
 import UpdateBanner from './components/UpdateBanner';
+import BottomNav from './components/Layout/BottomNav';
 
 export default function App() {
   const dark = useThemeStore((s) => s.dark);
@@ -44,7 +45,7 @@ export default function App() {
       <div className="min-h-screen flex flex-col">
         <UpdateBanner />
         <Header />
-        <main className="flex-1 px-4 py-8">
+        <main className="flex-1 px-4 py-8 pb-24 md:pb-8">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/subject/:id" element={<SubjectPage />} />
@@ -66,6 +67,7 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
+        <BottomNav />
       </div>
     </BrowserRouter>
   );

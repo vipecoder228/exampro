@@ -65,7 +65,7 @@ export default function Header() {
           </button>
 
           <button
-            className="md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="hidden md:flex p-2.5 min-w-[44px] min-h-[44px] items-center justify-center"
             onClick={() => setMobileOpen(!mobileOpen)}
             style={{ color: 'var(--text-secondary)' }}
           >
@@ -75,7 +75,7 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+        <div className="hidden md:block border-t" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
           <nav className="flex flex-col p-4 gap-3">
             {navLinks.map((link) => (
               <Link
